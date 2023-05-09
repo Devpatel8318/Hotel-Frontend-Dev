@@ -11,27 +11,8 @@ export default function LoginPage() {
     async function userLogin(ev) {
         try {
             ev.preventDefault();
-            //     const data = await axios.post('/login', {
-            //         email, password
-            //     }, {
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             Accept: "application/json",
-            //             "Access-Control-Allow-Origin": "*",
-            //         }
-            //     })
-            //     document.cookie = `token=${data.data.data};path=/;expires=${new Date(Date.now() + 15 * 60 * 1000).toUTCString()}`;
-            //     console.log(data.data);
-            //     const userData = data.data.userDoc;
-            //     console.log(userData)
-            //     setUser(userData);
-            //     setRedirect(true)
-            //     alert('Login successful');
-
-
-            const req = await fetch("https://hotel-dev-backend.onrender.com/api/login", {
+            const req = await fetch("https://hotel-dev-backend.onrender.com/login", {
                 method: "POST",
-                // credentials:false,
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
@@ -42,15 +23,19 @@ export default function LoginPage() {
                     password: password
                 }),
             });
-            const data = await req.json();
-            const userDoc = data.userDoc;
-            // console.log(userDoc);
-            setUser(userDoc);
-            setRedirect(true)
-            
-            
-            alert('Login successful');
+            console.log(req.status);
 
+            const data = await req.json();
+            console.log(data);
+            if (data.mymessage === "ok") {
+                const userDoc = data.userDoc;
+                alert("Logged In")
+                setUser(userDoc);
+                setRedirect(true);
+            }
+            else {
+                alert(data.mymessage);
+            }
         }
         catch (e) {
             alert("Login Failed");

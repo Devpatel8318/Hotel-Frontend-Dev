@@ -1,4 +1,4 @@
-import React, { useEffect,useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useState } from 'react'
 import axios from 'axios';
 import { UserContext } from '../UserContext'
@@ -8,7 +8,7 @@ import AccountNav from '../AccountNav';
 import { Navigate, useParams } from 'react-router-dom';
 function PlacesFormPage() {
 
-    const { user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     const { id } = useParams();
     const [title, setTitle] = useState('');
@@ -22,25 +22,38 @@ function PlacesFormPage() {
     const [maxGuests, setMaxGuests] = useState('');
     const [price, setPrice] = useState(1000);
     const [redirect, setRedirect] = useState(false);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
+
+        async function fetcher(idd) {
+            await axios.get('/places/' + idd).then(response => {
+                const { data } = response;
+                setTitle(data.title);
+                setDescription(data.descriptions);
+                setExtraInfo(data.extraInfo);
+                setAddedPhotos(data.photos);
+                setAddress(data.address);
+                setPerks(data.perks);
+                setCheckIn(data.checkIn);
+                setCheckOut(data.checkOut);
+                setMaxGuests(data.maxGuests);
+                setPrice(data.price);
+            });
+            setLoading(false);
+        }
+
+
+
         if (id === undefined) {
             return;
         }
-        axios.get('/places/' + id).then(response => {
-            const { data } = response;
-            setTitle(data.title);
-            setDescription(data.descriptions);
-            setExtraInfo(data.extraInfo);
-            setAddedPhotos(data.photos);
-            setAddress(data.address);
-            setPerks(data.perks);
-            setCheckIn(data.checkIn);
-            setCheckOut(data.checkOut);
-            setMaxGuests(data.maxGuests);
-            setPrice(data.price);
-        });
+
+        fetcher(id);
+
+
+
     }, [id])
 
     async function savePlace(ev) {
@@ -49,7 +62,7 @@ function PlacesFormPage() {
         const placeData = {
             title, address, addedPhotos,
             perks, description, extraInfo,
-            checkIn, checkOut, maxGuests,price
+            checkIn, checkOut, maxGuests, price
         }
 
 
@@ -61,7 +74,6 @@ function PlacesFormPage() {
             alert("Place Updated");
             setRedirect(true);
 
-
         } else {
             //new Place
             await axios.post('/places', placeData, { withCredentials: true });
@@ -69,6 +81,7 @@ function PlacesFormPage() {
             setRedirect(true);
         }
     }
+    
 
     if (user === "null") {
         return <Navigate to={'/login'} />
@@ -76,6 +89,16 @@ function PlacesFormPage() {
 
     if (redirect) {
         return <Navigate to={'/account/places'} />
+    }
+
+
+    if (loading) {
+        //loader
+        return <div>
+            <div className="fixed top-0 right-0 z-50 flex items-center justify-center w-screen h-screen">
+                <div className="w-32 h-32 border-t-2 border-b-2 rounded-full animate-spin border-rose-700"></div>
+            </div>
+        </div>
     }
 
     return (
