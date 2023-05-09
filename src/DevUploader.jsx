@@ -24,7 +24,7 @@ function DevUploader({ imageUrl="https://a0.muscache.com/im/pictures/miso/Hostin
     console.log(newImage);
     const data = { myFile: newImage }
 
-    axios.post('http://localhost:4000/devupload', data, {
+    axios.post('https://hotel-dev-backend.onrender.com/api/devupload', data, {
       headers: {
         'Content-Type': 'application/json'
       },

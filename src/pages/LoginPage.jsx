@@ -29,7 +29,7 @@ export default function LoginPage() {
             //     alert('Login successful');
 
 
-            const req = await fetch("http://localhost:4000/login", {
+            const req = await fetch("https://hotel-dev-backend.onrender.com/api/login", {
                 method: "POST",
                 // credentials:false,
                 credentials: "include",
