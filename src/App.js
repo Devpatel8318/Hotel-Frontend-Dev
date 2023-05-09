@@ -10,10 +10,15 @@ import PlacesPage from "./pages/PlacesPage";
 import PlacesFormPage from "./pages/PlacesFormPage";
 import SinglePlace from "./pages/SinglePlace";
 import BookingsPage from "./pages/BookingsPage";
+import { useEffect } from "react";
 // import SingleBookingPage from "./pages/SingleBookingPage";
 
 axios.defaults.baseURL = "https://hotel-dev-backend.onrender.com";
 function App() {
+  useEffect(() => {
+    document.title = "Hotel";
+  }, []);
+  
 
   return (
     <UserContextProvider>
@@ -24,15 +29,15 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account" element={<ProfilePage />} />
           <Route path="/account/places" element={<PlacesPage />} />
-          <Route path="/account/places/new" element={<PlacesFormPage/>} />
-          <Route path="/account/places/:id" element={<PlacesFormPage/>} />
-          <Route path="/place/:id" element={<SinglePlace/>} />
-          <Route path="/account/bookings" element={<BookingsPage/>} />
+          <Route path="/account/places/new" element={<PlacesFormPage />} />
+          <Route path="/account/places/:id" element={<PlacesFormPage />} />
+          <Route path="/place/:id" element={<SinglePlace />} />
+          <Route path="/account/bookings" element={<BookingsPage />} />
           {/* <Route path="/account/bookings/:id" element={<SingleBookingPage/>} /> */}
         </Route>
       </Routes>
     </UserContextProvider>
   );
 }
- 
+
 export default App;
